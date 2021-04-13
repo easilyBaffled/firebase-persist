@@ -1,37 +1,29 @@
-/**
- *
- * @param {string|number} red
- * @param {string|number} green
- * @param {string|number} blue
- *
- * @returns {string}
- */
-export const rgbToHex = ( red, green, blue ) => {
-    const redHex = red.toString( 16 );
-    const greenHex = green.toString( 16 );
-    const blueHex = blue.toString( 16 );
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
+import { createDefaultPersistConfig } from "./configuredPersist";
+import { initRealtimeFirebaseDB } from "./firebaseConnection";
+import { rq } from "./utils";
+import { deserializePersist } from "./deserializePersist";
 
-    return pad( redHex ) + pad( greenHex ) + pad( blueHex );
+export default createDefaultPersistConfig;
+
+export const createFireBaseRealTimePersistConfig = (
+    firebaseConfig = rq`firebaseConfig`,
+    throttleTime
+) => {
+    const dbStorage = initRealtimeFirebaseDB( firebaseConfig, throttleTime );
+
+    const mergedStorage = {
+        deleteItem: ( ...args ) =>
+            storage.deleteItem( ...args ).then( ( res ) => {
+                dbStorage.deleteItem();
+                return res;
+            }),
+        getItem: dbStorage.getItem,
+        setItem: ( key, value ) =>
+            storage.setItem( key, value ).then( () => {
+                dbStorage.setItem( deserializePersist( value ) );
+            })
+    };
+
+    return createDefaultPersistConfig({ storage: mergedStorage });
 };
-
-/**
- *
- * @param {string} hex
- * @returns {number[]}
- */
-export const hexToRgb = ( hex ) => {
-    const red = parseInt( hex.substring( 0, 2 ), 16 );
-    const green = parseInt( hex.substring( 2, 4 ), 16 );
-    const blue = parseInt( hex.substring( 4, 6 ), 16 );
-
-    return [ red, green, blue ];
-};
-
-/**
- *
- * @param {string} hex
- * @returns {string}
- */
-// const pad = ( hex ) => ( hex.length === 1 ? "0" + hex : hex );
-const pad = hexString => hexString.replace( /^(\w)$/, '0$1' );
-

@@ -59,6 +59,9 @@
     "eslint": "^7.23.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-sort-keys-fix": "^1.1.1",
+    "esm": "^3.2.25",
+    "firebase-functions-test": "^0.2.3",
+    "jest": "^26.6.3",
     "mocha": "^8.3.2",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
@@ -67,19 +70,30 @@
   "keywords": [],
   "repository": {
     "type": "git",
-    "url": "https://github.com/easilyBaffled/template-module.git"
+    "url": "https://github.com/easilyBaffled/firebase-persist.git"
   },
   "release": {
-	"plugins": [
-	  "@semantic-release/commit-analyzer",
-	  "@semantic-release/release-notes-generator",
-	  "@semantic-release/github",
-	  [
-		"@semantic-release/npm",
-		{
-		  "pkgRoot": "./pkg"
-		}
-	  ]
-	]
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/github",
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "./pkg"
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "firebase": "^8.3.3",
+    "lodash": "^4.17.21",
+    "lodash-es": "^4.17.21",
+    "p-throttle": "^4.1.1",
+    "redux-persist": "^6.0.0"
+  },
+  "exports": {
+    "import": "dist-src/index.js",
+    "require": "dist-node/index.js"
   }
 }

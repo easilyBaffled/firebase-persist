@@ -1,28 +1,35 @@
 import { expect } from "chai";
-import { rgbToHex, hexToRgb } from "../index.js";
+import { createFBStorageAPI } from "../createFBStorageAPI.js";
 
-describe( "Color Code Converter", () => {
-    describe( "RGB to Hex conversion", () => {
-        it( "converts the basic colors", () => {
-            const redHex = rgbToHex( 255, 0, 0 ),
-                greenHex = rgbToHex( 0, 255, 0 ),
-                blueHex = rgbToHex( 0, 0, 255 );
+const mockFirebase = {
+    get: () => Promise.resolve({ val: () => ({ id: 0 }) }),
+    set: ( v ) => Promise.resolve( v )
+};
 
-            expect( redHex ).to.equal( "ff0000" );
-            expect( greenHex ).to.equal( "00ff00" );
-            expect( blueHex ).to.equal( "0000ff" );
-        });
+const wait = ( time ) =>
+    new Promise( ( res ) => {
+        setTimeout( res(), time );
     });
 
-    describe( "Hex to RGB conversion", () => {
-        it( "converts the basic colors", () => {
-            const red = hexToRgb( "ff0000" );
-            const green = hexToRgb( "00ff00" );
-            const blue = hexToRgb( "0000ff" );
-
-            expect( red ).to.deep.equal([ 255, 0, 0 ]);
-            expect( green ).to.deep.equal([ 0, 255, 0 ]);
-            expect( blue ).to.deep.equal([ 0, 0, 255 ]);
-        });
+describe( "createFBStorageAPI", () => {
+    it( "should provide the functions for a redux-persist storage", () => {
+        const actual = Object.keys( createFBStorageAPI( mockFirebase ) );
+        const expected = [ "getItem", "setItem", "deleteItem" ];
+        expect( actual ).to.members( expected );
+    });
+    it( "getItem should return a promised value", async () => {
+        const actual = await createFBStorageAPI( mockFirebase, 0 )
+            .getItem()
+            .then( ( v ) => v.id );
+        const expected = 0;
+        expect( actual ).to.eqls( expected );
+    });
+    it( "setItem should return a promised", async () => {
+        const actual = await createFBStorageAPI( mockFirebase )
+            .setItem( 1 )
+            .then( ( v ) => v );
+        const expected = 1;
+        await wait( 2100 );
+        expect( actual ).to.eqls( expected );
     });
 });
