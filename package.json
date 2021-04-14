@@ -1,5 +1,5 @@
 {
-  "name": "@easilybaffled/template-module",
+  "name": "@easilybaffled/firebase-persist",
   "publishConfig": {
     "access": "public"
   },
