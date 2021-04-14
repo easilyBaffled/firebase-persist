@@ -33,3 +33,7 @@ describe( "createFBStorageAPI", () => {
         expect( actual ).to.eqls( expected );
     });
 });
+
+// describe( "createFireBaseRealTimePersistConfig", () => {
+//     expect( createFireBaseRealTimePersistConfig() ).to.be.rejectedWith( Error );
+// });
