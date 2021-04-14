@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.2.1",
+  "version": "0.0.0-development",
   "description": "",
   "main": "src/index.js",
   "type": "module",
@@ -16,7 +16,8 @@
     "prettier": "prettier --write  src/",
     "lint": "eslint -f stylish -c .eslintrc.cjs --fix . --ext .js",
     "format": "npm run prettier && npm run lint",
-    "sr": "npx semantic-release"
+    "sr": "npx semantic-release",
+    "semantic-release": "semantic-release"
   },
   "author": "",
   "license": "ISC",
